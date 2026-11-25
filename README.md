@@ -7,7 +7,7 @@ Tiene dos interfaces conectadas entre sí:
 - **Entrenador (ordenador):** crea ejercicios con vídeo demostrativo, monta programas por fases, semanas y sesiones, los asigna y hace el seguimiento.
 - **Atleta (móvil):** ve su programa activo y las sesiones pendientes, registra lo que hace y valora el esfuerzo.
 
-> **Estado: prototipo navegable.** Todo funciona en el navegador con datos de ejemplo ficticios y se pierde al recargar la página. Todavía no hay cuentas reales, base de datos ni servidor (ver [Siguientes pasos](#siguientes-pasos)).
+> **Estado: prototipo para entorno universitario controlado.** Funciona en el navegador, sin servidor. Cada email (Gmail u otro) tiene su cuenta y sus datos se guardan en ese navegador: al volver a entrar se recuerdan programas, miembros, plantillas, ejercicios y perfil. Los datos no viajan entre dispositivos.
 
 ## Funcionalidades
 
@@ -30,7 +30,7 @@ Tiene dos interfaces conectadas entre sí:
 - **Entreno:** vista previa, ejercicios con tick, vídeo e indicaciones, edición de reps y kg reales, y comentarios con adjuntos.
 - **Valoración final:** esfuerzo percibido (RPE) y duración; el entrenador lo ve en Actividad.
 - **Chats y perfil:** mensajes, datos personales y contadores de entrenos completados y semanas seguidas.
-- **Registro:** flujo de alta para entrenador y para atleta (con código de invitación).
+- **Cuentas:** registro e inicio de sesión con email y contraseña; la sesión y los datos se recuerdan al cerrar y volver a abrir la web.
 
 ## Cómo probarlo
 
@@ -41,7 +41,7 @@ python3 -m http.server 8080
 # y entra en http://localhost:8080
 ```
 
-El selector de la barra superior alterna entre **Entrenador · ordenador**, **Atleta · móvil** y **Registro**.
+Al abrir la web se pide iniciar sesión o crear una cuenta (entrenador o atleta). Un entrenador nuevo empieza **sin programas ni miembros**, con la biblioteca COSITAS ya cargada. El selector de la barra superior alterna entre **Entrenador · ordenador** y **Atleta · móvil** (vista previa), y **Salir** cierra la sesión.
 
 Prueba rápida de todas las pantallas (requiere Node.js):
 
@@ -54,20 +54,22 @@ node tests/smoke.js
 ```
 index.html          Página principal
 css/styles.css      Estilos (tema oscuro, acento #FF83D6)
-js/seed-data.js     Biblioteca de ejercicios de ejemplo
+js/seed-data.js     Biblioteca COSITAS: 430 ejercicios, 198 con vídeo de YouTube
 js/app.js           Lógica y pantallas de la aplicación
+js/auth.js          Cuentas y memoria (localStorage e IndexedDB)
+docs/videos_pendientes.csv  Ejercicios cuyo vídeo hay que subir a mano
 assets/logo.png     Logo
 tests/smoke.js      Prueba que pinta todas las pantallas
 ```
 
-## Datos de ejemplo
+## Datos y memoria
 
-Los atletas, correos, programas y ejercicios son ficticios. La biblioteca de ejemplo (`js/seed-data.js`) no incluye vídeos. Este repositorio es público: no subas aquí datos personales de atletas ni vídeos o contenido que no quieras publicar.
+La biblioteca incluye los 430 ejercicios del entrenador, 198 con enlace de YouTube. Los otros 227 vídeos eran archivos propios que no están en el repositorio: se listan en `docs/videos_pendientes.csv` para subirlos desde *Editar ejercicio → sube un vídeo desde tu ordenador* (se guardan en IndexedDB del navegador). No hay programas ni miembros de ejemplo. Las contraseñas se guardan con un hash simple en `localStorage`: válido para pruebas en clase, no para producción.
 
 ## Siguientes pasos
 
 1. **Cuentas y datos reales:** autenticación para entrenador y atletas y base de datos (por ejemplo Supabase, con permisos por fila para que cada atleta solo vea lo suyo).
-2. **Vídeos:** almacenamiento propio para los vídeos subidos (ahora solo duran la sesión del navegador).
+2. **Vídeos:** almacenamiento propio (los subidos ahora quedan solo en el navegador donde se subieron).
 3. **Invitaciones por email** y unión automática del atleta a su programa al registrarse.
 4. **Pendiente de completar en la interfaz:** historial del atleta por ejercicio, chat bidireccional, recogida de respuestas de los cuestionarios y que el tipo de peso y de reps se refleje en la vista del atleta.
 5. **Publicación:** alojamiento web (Vercel, Netlify o GitHub Pages) con dominio propio.
