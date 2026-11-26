@@ -206,6 +206,17 @@
   };
 
   /* ---------- vídeos subidos desde el ordenador ---------- */
+  function makeThumb(f) {
+    return new Promise((res) => {
+      const v = document.createElement('video'), u = URL.createObjectURL(f);
+      const done = (b) => { URL.revokeObjectURL(u); res(b); };
+      v.muted = true; v.preload = 'metadata'; v.playsInline = true; v.src = u;
+      v.onerror = () => done(null);
+      v.onloadedmetadata = () => { v.currentTime = Math.min(0.6, (v.duration || 1) / 2); };
+      v.onseeked = () => { try { const w = 192, h = Math.round(w * v.videoHeight / v.videoWidth) || 108, c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(v, 0, 0, w, h); c.toBlob((x) => done(x), 'image/jpeg', 0.7); } catch (e) { done(null); } };
+      setTimeout(() => done(null), 15000);
+    });
+  }
   window.upBlob = function (f) {
     const u = URL.createObjectURL(f), k = UID + '/' + Date.now() + '-' + f.name.normalize('NFD').replace(/[^\w.-]+/g, '-');
     sb.storage.from('videos').upload(k, f, { contentType: f.type || 'video/mp4' }).then((r) => {
@@ -213,6 +224,7 @@
       const pub = sb.storage.from('videos').getPublicUrl(k).data.publicUrl;
       LIB.forEach((x) => { if (x.v === u) x.v = pub; });
       say('Vídeo subido'); save(); if (!typing()) render();
+      makeThumb(f).then((t) => { if (t) sb.storage.from('videos').upload('thumbs/' + k.replace(/\.[^.]+$/, '.jpg'), t, { contentType: 'image/jpeg', upsert: true }).then(() => { if (!typing()) render(); }); });
     });
     return u;
   };
