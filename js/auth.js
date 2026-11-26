@@ -4,7 +4,8 @@
    Es la versión de prueba para un entorno controlado: sin servidor, los datos no viajan entre dispositivos. */
 const LS={g:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},s:(k,v)=>{try{localStorage.setItem(k,v===undefined?'':JSON.stringify(v));return true}catch(e){return false}},d:k=>{try{localStorage.removeItem(k)}catch(e){}}};
 const hs=s=>{let a=0xdeadbeef,b=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^a>>>16,2246822507)^Math.imul(b^b>>>13,3266489909);b=Math.imul(b^b>>>16,2246822507)^Math.imul(a^a>>>13,3266489909);return(4294967296*(2097151&b)+(a>>>0)).toString(36)};
-const uk=e=>String(e||'').trim().toLowerCase(),emailTaken=e=>!!LS.g('solo.users',{})[uk(e)];
+const uk=e=>String(e||'').trim().toLowerCase();
+function emailTaken(e){return !!LS.g('solo.users',{})[uk(e)]}
 const TAGS0=[...TAGS],FORMS0=JSON.parse(JSON.stringify(FORMS)),PF0={n:'',e:'',a:'',h:'',w:'',f:''};
 let ME=LS.g('solo.session',null),AV='login',warned=0;
 const BM={};let IDBP=null;
@@ -25,11 +26,12 @@ function logout(){save();ME=null;LS.d('solo.session');setAll(null);AV='login';re
 function loginView(){return`<div class="rg"><div class="rc"><h2 style="text-align:center;margin:0 0 6px">Inicia sesión</h2><p class="mu" style="text-align:center;margin:0 0 16px">Entra con tu email y recuperarás tus programas, miembros y ejercicios.</p><div class="f"><label>Email<input id="l_e" type="email" autocomplete="email" placeholder="tu@gmail.com"></label><label>Contraseña<input id="l_p" type="password" autocomplete="current-password" onkeydown="if(event.key=='Enter')doLogin()"></label><div class="err" id="rerr"></div><button class="btn" style="padding:11px" onclick="doLogin()">Entrar</button><p class="mu" style="text-align:center;margin:4px 0 0">¿No tienes cuenta? <span class="lk" onclick="AV='reg';R={role:'c',st:1,d:{}};render()">Crear cuenta</span></p></div></div></div>`}
 const _render=render;
 render=function(){const sw=$('.sw');if(sw)sw.style.display=ME?'':'none';
-if(!ME){$('#app').innerHTML=AV=='reg'?`<p class="mu" style="text-align:center;margin:14px 0 0"><span class="lk" onclick="AV='login';render()">‹ Volver a iniciar sesión</span></p>`+reg():loginView();return}
+if(!ME){$('#app').innerHTML=AV=='boot'?'<p class="mu" style="text-align:center;margin-top:80px">Cargando…</p>':AV=='reg'?`<p class="mu" style="text-align:center;margin:14px 0 0"><span class="lk" onclick="AV='login';render()">‹ Volver a iniciar sesión</span></p>`+reg():loginView();return}
 const u=LS.g('solo.users',{})[ME];if(u&&u.role=='a'&&mode!='a')mode='a';
 const bc=$('#bc');if(bc)bc.style.display=u&&u.role=='a'?'none':'';const br=$('#br');if(br)br.textContent='Salir · '+ME;
 save();_render()};
 if(typeof addEventListener=='function'){addEventListener('input',()=>{clearTimeout(render.t);render.t=setTimeout(save,400)});addEventListener('beforeunload',save)}
-if(ME&&!LS.g('solo.users',{})[ME])ME=null;
+if(typeof CLOUD_CFG!='undefined'&&typeof supabase!='undefined'){ME=null;AV='boot';render()}
+else{if(ME&&!LS.g('solo.users',{})[ME])ME=null;
 if(ME)enter(ME);
-render();
+render()}

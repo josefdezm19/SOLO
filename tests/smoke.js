@@ -4,11 +4,11 @@ const fs = require('fs'), vm = require('vm'), path = require('path');
 const root = path.join(__dirname, '..');
 const vals = {};
 const el = (k) => ({ innerHTML: '', textContent: '', get value() { return vals[k] ?? 'x'; }, set value(v) { vals[k] = v; }, style: {}, files: [], className: '', append() {}, remove() {} });
-global.document = { querySelector: (k) => el(k), createElement: () => el('t'), body: { append() {} } };
+global.CLOUD_CFG = undefined; global.location = { href: 'http://localhost/' }; global.document = { querySelector: (k) => el(k), createElement: () => el('t'), body: { append() {} } };
 global.prompt = () => 'Nombre nuevo'; global.confirm = () => true;
 global.URL = { createObjectURL: () => 'blob:x' }; global.__v = vals;
 const store = {}; global.localStorage = { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = String(v); }, removeItem: (k) => { delete store[k]; } }; global.__store = store;
-const code = ['js/seed-data.js', 'js/app.js', 'js/auth.js'].map((f) => fs.readFileSync(path.join(root, f), 'utf8')).join('\n');
+const code = ['js/seed-data.js', 'js/app.js', 'js/auth.js', 'js/cloud.js'].map((f) => fs.readFileSync(path.join(root, f), 'utf8')).join('\n');
 vm.runInThisContext(code);
 vm.runInThisContext(`
 const T = [];
@@ -17,7 +17,7 @@ const ok = (c, m) => { if (!c) throw new Error(m); };
 const V_ = __v;
 
 const S_ = __store;
-t('arranca sin datos de ejemplo', () => { ok(PROG.length === 0 && MEM.length === 0 && ACT.length === 0, 'hay datos de ejemplo'); ok(LIB.length === 430 && LIB.filter((x) => x.v).length === 198, 'biblioteca: ' + LIB.length); });
+t('arranca sin datos de ejemplo', () => { ok(PROG.length === 0 && MEM.length === 0 && ACT.length === 0, 'hay datos de ejemplo'); ok(LIB.length === 430 && LIB.filter((x) => x.v).length === 425, 'biblioteca: ' + LIB.length); });
 t('pantallas vacias', () => { for (const p of ['home', 'members', 'progs', 'forms', 'lib']) { V = { p }; coach(); } mode = 'a'; for (const x of ['home', 'prog', 'perfil']) { A.t = x == 'perfil' ? 'perfil' : 'hoy'; A.s = x; athlete(); } });
 t('registro entrenador', () => { mode = 'r'; R = { role: 'c', st: 1, d: { name: 'Ana Gómez', email: 'Ana.Gomez@Gmail.com', pass: 'clave1234', club: 'Club', sport: 'Fútbol', terms: true } }; ok(!emailTaken(R.d.email), 'ya existe'); sendC(); ok(ME === 'ana.gomez@gmail.com' && emailTaken('ANA.gomez@gmail.com'), 'no crea la cuenta'); ok(PF.n === 'Ana Gómez', 'perfil'); });
 t('crear programa y miembro', () => { go('home'); V_['#pn'] = 'Mi programa'; V_['#po'] = '0'; V_['#pt'] = ''; mkProg(); ok(PROG.length === 1, 'programa'); V_['#mn'] = 'Alumno Uno'; V_['#me'] = 'alumno@gmail.com'; saveMem(); ok(MEM.length === 1, 'miembro'); PROG[0].as.push('Alumno Uno'); LIB[0].t = ['Fuerza']; PROG[0].ph[0].s[0][0].blocks[0].ex.push({ e: 0, p: ['reps', 'peso'], sets: [{ reps: 8, peso: 20 }] }); PF.a = '30'; render(); });
