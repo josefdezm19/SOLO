@@ -3,11 +3,9 @@
 button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 .top{display:flex;align-items:center;gap:12px;padding:8px 16px;background:#000;border-bottom:1px solid var(--ln);position:sticky;top:0;z-index:5;flex-wrap:wrap}
 .top img{height:30px}.brand{font-weight:700;font-style:italic;font-size:18px}
-.sw{margin-left:auto;display:flex;border:1px solid var(--ln);border-radius:20px;overflow:hidden}
-.sw button{background:none;border:0;padding:6px 14px;color:var(--mu)}.sw .on{background:var(--ac);color:var(--acx);font-weight:700}
 .bc{display:flex;background:#1c1c20;font-size:14px;overflow-x:auto}.bc a{padding:8px 16px;color:var(--mu);cursor:pointer;white-space:nowrap}.bc a.on{background:var(--ac);color:var(--acx);font-weight:700}
 main{padding:16px;max-width:1200px;margin:auto}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:14px}
 .bl{background:var(--pn);border-radius:6px;overflow:hidden}.bl h3{margin:0;padding:10px 14px;background:#111;font-size:13px;display:flex;justify-content:space-between;align-items:center;letter-spacing:.04em}
 .row{display:flex;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid var(--ln);cursor:pointer}.row:hover{background:var(--pn2)}.row .g{flex:1}.mu{color:var(--mu);font-size:13px}
 .tag{background:var(--ok);color:#06210f;border-radius:12px;padding:1px 10px;font-size:12px;font-weight:700}.tag.w{background:var(--ac);color:var(--acx)}
@@ -39,3 +37,10 @@ table{width:100%;border-collapse:collapse}td,th{padding:6px;text-align:left}th{c
 .rc{background:var(--pn);border-radius:10px;padding:22px;max-width:620px;margin:auto}.rc h2{margin:0 0 4px;font-size:22px}.r2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}@media(max-width:560px){.r2,.rl{grid-template-columns:1fr}}
 .inv{background:var(--pn2);border-left:3px solid var(--ac);border-radius:6px;padding:10px 12px;margin-bottom:12px}.err{color:#ff8a8a;font-size:13px;min-height:16px}.f .ck2,.ck2{display:flex;gap:8px;align-items:flex-start;color:var(--mu);font-size:13px}.ck2 input{margin-top:2px;flex:none}.lk{color:var(--ac);cursor:pointer;text-decoration:underline}
 .prog{display:flex;gap:6px;margin:4px 0 14px}.prog i{flex:1;height:4px;border-radius:2px;background:var(--ln)}.prog i.on{background:var(--ac)}
+
+/* Adaptación automática: el móvil real ocupa toda la pantalla; en ordenador la vista de atleta se muestra dentro de un marco de móvil */
+@media(max-width:600px){
+ main{padding:10px}.top{padding:8px 12px}
+ .v-a .phone,.v-r .phone{width:100%;height:calc(100vh - 47px);height:calc(100dvh - 47px);border:0;border-radius:0;margin:0}
+ .row{flex-wrap:wrap}.tabs{overflow-x:auto;gap:16px}.md{padding:2vh 8px}.mb{padding:14px}
+}

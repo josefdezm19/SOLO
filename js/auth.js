@@ -25,10 +25,9 @@ function doLogin(){const e=uk($('#l_e').value),u=LS.g('solo.users',{})[e];if(!u|
 function logout(){save();ME=null;LS.d('solo.session');setAll(null);AV='login';render()}
 function loginView(){return`<div class="rg"><div class="rc"><h2 style="text-align:center;margin:0 0 6px">Inicia sesión</h2><p class="mu" style="text-align:center;margin:0 0 16px">Entra con tu email y recuperarás tus programas, miembros y ejercicios.</p><div class="f"><label>Email<input id="l_e" type="email" autocomplete="email" placeholder="tu@gmail.com"></label><label>Contraseña<input id="l_p" type="password" autocomplete="current-password" onkeydown="if(event.key=='Enter')doLogin()"></label><div class="err" id="rerr"></div><button class="btn" style="padding:11px" onclick="doLogin()">Entrar</button><p class="mu" style="text-align:center;margin:4px 0 0">¿No tienes cuenta? <span class="lk" onclick="AV='reg';R={role:'c',st:1,d:{}};render()">Crear cuenta</span></p></div></div></div>`}
 const _render=render;
-render=function(){const sw=$('.sw');if(sw)sw.style.display=ME?'':'none';
+render=function(){
 if(!ME){$('#app').innerHTML=AV=='boot'?'<p class="mu" style="text-align:center;margin-top:80px">Cargando…</p>':AV=='reg'?`<p class="mu" style="text-align:center;margin:14px 0 0"><span class="lk" onclick="AV='login';render()">‹ Volver a iniciar sesión</span></p>`+reg():loginView();return}
-const u=LS.g('solo.users',{})[ME];if(u&&u.role=='a'&&mode!='a')mode='a';
-const bc=$('#bc');if(bc)bc.style.display=u&&u.role=='a'?'none':'';const br=$('#br');if(br)br.textContent='Salir · '+ME;
+const u=LS.g('solo.users',{})[ME];if(u&&u.role=='a')mode='a';else if(mode=='a')mode='c';
 save();_render()};
 if(typeof addEventListener=='function'){addEventListener('input',()=>{clearTimeout(render.t);render.t=setTimeout(save,400)});addEventListener('beforeunload',save)}
 if(typeof CLOUD_CFG!='undefined'&&typeof supabase!='undefined'){ME=null;AV='boot';render()}
