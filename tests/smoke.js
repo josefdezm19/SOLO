@@ -28,6 +28,7 @@ t('arranque con sesion guardada', () => { ok(S_['solo.data.ana.gomez@gmail.com']
 mode = 'c';
 for (const p of ['home', 'members', 'progs', 'forms', 'lib']) t('entrenador ' + p, () => { V = { p }; coach(); });
 for (const ct of ['prog', 'ph', 'tpl', 'ex']) t('cositas ' + ct, () => { V = { p: 'lib', ct }; coach(); lst(); });
+t('previsualizar ejercicio', () => { libView(0); libView(8); libForm(0); });
 t('miembro', () => { V = { p: 'mem', mi: 0 }; coach(); });
 t('programa', () => { V = { p: 'prog', pi: 0, phi: 0 }; coach(); });
 for (const vw of ['week', 'load']) t('editor ' + vw, () => { V = { p: 'ed', pi: 0, phi: 0, w: 0, d: 0, vw }; coach(); });

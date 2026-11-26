@@ -44,3 +44,5 @@ table{width:100%;border-collapse:collapse}td,th{padding:6px;text-align:left}th{c
  .v-a .phone,.v-r .phone{width:100%;height:calc(100vh - 47px);height:calc(100dvh - 47px);border:0;border-radius:0;margin:0}
  .row{flex-wrap:wrap}.tabs{overflow-x:auto;gap:16px}.md{padding:2vh 8px}.mb{padding:14px}
 }
+
+.xm{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;border:0;background:var(--pn2);color:var(--tx);font-size:22px;line-height:1;display:grid;place-items:center;padding:0;z-index:2}.xm:hover{background:var(--ac);color:var(--acx)}
