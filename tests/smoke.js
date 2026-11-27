@@ -28,6 +28,7 @@ t('arranque con sesion guardada', () => { ok(S_['solo.data.ana.gomez@gmail.com']
 mode = 'c';
 for (const p of ['home', 'members', 'progs', 'forms', 'lib']) t('entrenador ' + p, () => { V = { p }; coach(); });
 for (const ct of ['prog', 'ph', 'tpl', 'ex']) t('cositas ' + ct, () => { V = { p: 'lib', ct }; coach(); lst(); });
+t('renombrar y eliminar fase', () => { const n = PROG[0].ph.length; addPh(); V_['#fn'] = 'Fase extra'; V_['#fo'] = '0'; V_['#ft'] = ''; mkPh(); const m = PROG[0].ph.length; renPh(0); V_['#phn'] = 'Nov3'; savePhN(0); ok(PROG[0].ph[0].n === 'Nov3', 'no renombra'); global.confirm = () => true; V.phi = m - 1; delPh(m - 1); ok(m === n + 1 && PROG[0].ph.length === m - 1, 'no elimina'); if (PROG[0].ph.length === 1) { delPh(0); ok(PROG[0].ph.length === 1, 'borró la última fase'); } });
 t('previsualizar ejercicio', () => { libView(0); libView(8); libForm(0); });
 t('miembro', () => { V = { p: 'mem', mi: 0 }; coach(); });
 t('programa', () => { V = { p: 'prog', pi: 0, phi: 0 }; coach(); });
