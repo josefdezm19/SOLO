@@ -46,6 +46,10 @@ t('visibilidad', () => {
 t('plantilla de fase', () => { V = { p: 'prog', pi: 0, phi: 0 }; tplDlg('ph', 0); V_['#tn'] = 'Mi fase'; saveTpl(); ok(TPL.some((x) => x.k === 'ph' && x.n === 'Mi fase'), 'no guardada'); });
 t('crear desde plantilla', () => { const n = PROG.length; const i = TPL.findIndex((x) => x.n === 'Mi fase'); newProg(i); V_['#pn'] = 'Nuevo'; V_['#po'] = '2'; V_['#pt'] = String(i); mkProg(); ok(PROG.length === n + 1 && PROG[0].ph[0].hv.every((x) => x === true), 'no oculta'); });
 
+// renombrar y borrar fases
+t('renombrar fase', () => { V = { p: 'prog', pi: 0, phi: 0 }; mn('ph', 0, 0, 0); renPh(0); V_['#rpn'] = 'Fase renombrada'; saveRenPh(0); ok(P().ph[0].n === 'Fase renombrada', 'no renombra'); V_['#rpn'] = '  '; saveRenPh(0); ok(P().ph[0].n === 'Fase renombrada', 'acepta nombre vacio'); });
+t('borrar fase', () => { V = { p: 'prog', pi: 0, phi: 0 }; const n = P().ph.length; doDelPh(0); if (n < 2) ok(P().ph.length === 1, 'borra la unica fase'); V_['#fn'] = 'Otra'; V_['#fo'] = '0'; V_['#ft'] = ''; mkPh(); const m = P().ph.length; delPh(m - 1); doDelPh(m - 1); ok(P().ph.length === m - 1 && V.phi === 0, 'no borra'); coach(); });
+
 // copiar semana a otro programa
 t('copiar semana', () => { V = { p: 'prog', pi: 1, phi: 0 }; const n = PROG[0].ph[0].w; V_['#cpp'] = '0'; V_['#cph'] = '0'; cpDlg('wk', 0, 0, 0, 'o'); doCp(); ok(PROG[0].ph[0].w >= n, 'copia'); });
 
