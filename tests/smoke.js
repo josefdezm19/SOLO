@@ -29,12 +29,13 @@ mode = 'c';
 for (const p of ['home', 'members', 'progs', 'forms', 'lib']) t('entrenador ' + p, () => { V = { p }; coach(); });
 for (const ct of ['prog', 'ph', 'tpl', 'ex']) t('cositas ' + ct, () => { V = { p: 'lib', ct }; coach(); lst(); });
 t('renombrar y eliminar fase', () => { const n = PROG[0].ph.length; addPh(); V_['#fn'] = 'Fase extra'; V_['#fo'] = '0'; V_['#ft'] = ''; mkPh(); const m = PROG[0].ph.length; renPh(0); V_['#phn'] = 'Nov3'; savePhN(0); ok(PROG[0].ph[0].n === 'Nov3', 'no renombra'); global.confirm = () => true; V.phi = m - 1; delPh(m - 1); ok(m === n + 1 && PROG[0].ph.length === m - 1, 'no elimina'); if (PROG[0].ph.length === 1) { delPh(0); ok(PROG[0].ph.length === 1, 'borró la última fase'); } });
+t('bloques: añadir, renombrar, ejercicios, borrar', () => { V = { p: 'ed', pi: 0, phi: 0, w: 0, d: 0, vw: 'week' }; const s0 = () => PROG[0].ph[0].s[0][0]; global.confirm = () => true; coach(); const n = s0().blocks.length; addBlk(0, 0); ok(s0().blocks.length === n + 1, 'no añade'); rnBlk(0, 0, n, 'Calentamiento'); ok(s0().blocks[n].n === 'Calentamiento', 'no renombra'); pick(0, 0, n, -1); setEx(0, 0, n, -1, 3); ok(s0().blocks[n].ex.length === 1, 'ejercicio en bloque'); exModal(0, 0, n, 0); tp(0, 0, n, 0, 'rpe'); coach(); mode = 'a'; A.s = 'prev'; A.ses = 0; athlete(); A.s = 'run'; athlete(); A.s = 'ex'; A.ex = nx(s0()) - 1; athlete(); viewSes(0, 0); mode = 'c'; rmEx(0, 0, n, 0); ok(s0().blocks[n].ex.length === 0, 'no quita ejercicio'); delBlk(0, 0, n); ok(s0().blocks.length === n, 'no borra bloque'); while (s0().blocks.length > 1) delBlk(0, 0, 0); delBlk(0, 0, 0); ok(s0().blocks.length === 1, 'borró el último bloque'); });
 t('previsualizar ejercicio', () => { libView(0); libView(8); libForm(0); });
 t('miembro', () => { V = { p: 'mem', mi: 0 }; coach(); });
 t('programa', () => { V = { p: 'prog', pi: 0, phi: 0 }; coach(); });
 for (const vw of ['week', 'load']) t('editor ' + vw, () => { V = { p: 'ed', pi: 0, phi: 0, w: 0, d: 0, vw }; coach(); });
 t('formulario ejercicio', () => { libForm(-1); tgR(); libForm(8); tgR(); chT('p', 3); chT('e', 0); chT('t', 0); saveLib(-1); });
-t('anadir ejercicio a sesion', () => { V = { p: 'ed', pi: 0, phi: 0, w: 0, d: 0, vw: 'week' }; const n = P().ph[0].s[0][0].blocks[0].ex.length; setEx(0, 0, -1, 0); ok(P().ph[0].s[0][0].blocks[0].ex.length === n + 1, 'no se anade'); coach(); exModal(0, 0, n); viewSes(0, 0); });
+t('anadir ejercicio a sesion', () => { V = { p: 'ed', pi: 0, phi: 0, w: 0, d: 0, vw: 'week' }; const n = P().ph[0].s[0][0].blocks[0].ex.length; setEx(0, 0, 0, -1, 0); ok(P().ph[0].s[0][0].blocks[0].ex.length === n + 1, 'no se anade'); coach(); exModal(0, 0, 0, n); viewSes(0, 0); });
 
 // visibilidad de semanas: el atleta solo ve las semanas visibles
 t('visibilidad', () => {
